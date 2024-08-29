@@ -1,0 +1,275 @@
+openapi: '3.0.3'
+info:
+  title: 'Adventure Works'
+  version: '0.0.X'
+  description: 'Hackathon Santo Digital'
+  contact:
+    name: Julio Mariano
+    email: juliocauan@gmail.com
+
+servers:
+  - url: http://localhost:8080
+    description: Development Environment
+
+tags:
+  - name: 'product'
+
+paths: 
+  /products:
+    post:
+      tags:
+        - 'product'
+      summary: 'Cadastra novo Produto'
+      operationId: registerProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPostDTO'
+      responses:
+        '201':
+          $ref: '#/components/responses/OK'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    get:
+      tags:
+        - 'product'
+      summary: 'Buscar todos os Produtos'
+      operationId: getAllProducts
+      x-spring-paginated: true
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/ProductFilter'
+      responses:
+        '200':
+          description: 'Lista de Produtos retornada com sucesso!'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGetDTO'
+
+  /product/{id}:
+    get:
+      tags:
+        - 'product'
+      summary: 'Buscar Produto por ID'
+      operationId: getProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProductId'
+      responses:
+        '200':
+          description: 'Produto retornado com sucesso!'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGetDTO'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+        - 'product'
+      summary: 'Atualiza informações sobre o Produto'
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProductId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPutDTO'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - 'product'
+      summary: 'Remove Produto'
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProductId'
+      responses:
+        '200':
+          $ref: '#/components/responses/OK'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  
+components:
+  schemas:
+    ApiError:
+      type: object
+      required:
+        - timestamp
+        - message
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        message:
+          type: string
+          example: 'username must be have email format'
+        fieldErrors:
+          type: array
+          items:
+            type: string
+            example: 'username'
+    AuthenticationError:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: 'Full authentication is required to access this resource'
+    AuthorizationError:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: 'You do not have the credentials to access this resource'
+    OkResponse:
+      type: object
+      required:
+        - 'message'
+      properties:
+        message:
+          type: string
+          example: 'Success!'
+
+    ProductId:
+      type: integer
+      format: int32
+    ProductColour:
+      type: string
+      enum: ['VERMELHO', 'VERDE', 'AZUL']
+    ProductPostDTO:
+      type: object
+      required:
+        - name
+        - number
+        - price
+      properties:
+        name:
+          type: string
+          minLength: 5
+          maxLength: 255
+        number:
+          type: integer
+          format: int32
+        price:
+          type: number
+        colour:
+          $ref: '#/components/schemas/ProductColour'
+    ProductGetDTO:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ProductId'
+          readOnly: true
+        name:
+          type: string
+        number:
+          type: integer
+          format: int32
+        price:
+          type: number
+        colour:
+          $ref: '#/components/schemas/ProductColour'
+    ProductPutDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 5
+          maxLength: 255
+        number:
+          type: integer
+          format: int32
+        price:
+          type: number
+        colour:
+          $ref: '#/components/schemas/ProductColour'
+    ProductFilter:
+      type: object
+      properties:
+        name:
+          type: string
+        number:
+          type: integer
+          format: int32
+        price:
+          type: number
+        colour:
+          $ref: '#/components/schemas/ProductColour'
+
+  responses:
+    OK:
+      description: 'Operation successfully finished!'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OkResponse'
+    Unauthorized:
+      description: 'Operation failed: Not Authenticated!'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthenticationError'
+    NotFound:
+      description: 'Operation failed: Could not find provided resource!'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    BadRequest:
+      description: 'Operation failed: Bad resources provided!'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Forbidden:
+      description: 'Operation failed: Not Authorized!'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthorizationError'
+  
+  securitySchemes:
+    BearerAuth:
+      scheme: bearer
+      type: http
+      bearerFormat: JWT
