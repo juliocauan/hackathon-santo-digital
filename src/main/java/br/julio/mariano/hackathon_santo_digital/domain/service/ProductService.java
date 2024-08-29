@@ -1,6 +1,11 @@
 package br.julio.mariano.hackathon_santo_digital.domain.service;
 
+import java.util.List;
+
+import org.openapitools.model.ProductFilter;
+import org.openapitools.model.ProductGetDTO;
 import org.openapitools.model.ProductPostDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +23,11 @@ public class ProductService {
 
     public void register(@Valid ProductPostDTO productPostDTO) {
         productRepository.save(ProductMapper.INSTANCE.toEntity(productPostDTO));
+    }
+
+    public List<ProductGetDTO> getAll(@Valid ProductFilter filter, Pageable pageable) {
+        
+        return null;
     }
 
 }

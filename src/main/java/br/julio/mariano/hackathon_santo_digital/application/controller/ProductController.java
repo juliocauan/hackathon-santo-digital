@@ -31,8 +31,8 @@ public class ProductController implements ProductApi {
 
     @Override
     public ResponseEntity<List<ProductGetDTO>> _getAllProducts(@Valid ProductFilter filter, Pageable pageable) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method '_getAllProducts'");
+        List<ProductGetDTO> response = productService.getAll(filter, pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override
