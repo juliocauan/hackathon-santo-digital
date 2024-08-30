@@ -37,8 +37,8 @@ public class ProductController implements ProductApi {
 
     @Override
     public ResponseEntity<ProductGetDTO> _getProduct(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method '_getProduct'");
+        ProductGetDTO response = productService.getById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @Override

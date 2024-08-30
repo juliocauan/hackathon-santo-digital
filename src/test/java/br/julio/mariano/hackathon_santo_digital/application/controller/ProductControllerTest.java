@@ -47,8 +47,8 @@ class ProductControllerTest extends TestContext {
                 .id(null)
                 .colour(ProductColour.AZUL)
                 .name(getRandomString())
-                .number((int) (Math.random()*100))
-                .price(new BigDecimal(Math.round(Math.random()*100)))
+                .number((int) (Math.random() * 100))
+                .price(new BigDecimal(Math.round(Math.random() * 100)))
                 .build();
     }
 
@@ -146,7 +146,7 @@ class ProductControllerTest extends TestContext {
         Product expectedProduct = generateRandomProduct();
         expectedProduct.setName("!00firstname");
         expectedProduct = productRepository.saveAndFlush(expectedProduct);
-        saveSampleProducts(sizeDefault-1);
+        saveSampleProducts(sizeDefault - 1);
         filter.name(OrderEnum.DESC);
         getMockMvc().perform(
                 MockMvcRequestBuilders.get(baseEndpoint)
@@ -180,7 +180,7 @@ class ProductControllerTest extends TestContext {
         Product expectedProduct = generateRandomProduct();
         expectedProduct.setPrice(new BigDecimal("0.01"));
         expectedProduct = productRepository.saveAndFlush(expectedProduct);
-        saveSampleProducts(sizeDefault-1);
+        saveSampleProducts(sizeDefault - 1);
         filter.price(OrderEnum.DESC);
         getMockMvc().perform(
                 MockMvcRequestBuilders.get(baseEndpoint)
@@ -207,7 +207,8 @@ class ProductControllerTest extends TestContext {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].name").value(expectedProduct.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].number").value(expectedProduct.getNumber()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].price").value(expectedProduct.getPrice().intValue()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].colour").value(expectedProduct.getColour().getValue()));
+                .andExpect(
+                        MockMvcResultMatchers.jsonPath("$.[0].colour").value(expectedProduct.getColour().getValue()));
     }
 
     @Test
@@ -229,7 +230,7 @@ class ProductControllerTest extends TestContext {
 
     @Test
     void getAllProducts_branch_nullPage() throws Exception {
-        saveSampleProducts(sizeDefault);
+        saveSampleProducts(20);
         getMockMvc().perform(
                 MockMvcRequestBuilders.get(baseEndpoint)
                         .queryParam("size", sizeDefault.toString()))
@@ -239,21 +240,43 @@ class ProductControllerTest extends TestContext {
 
     @Test
     void getAllProducts_branch_nullSize() throws Exception {
-        saveSampleProducts(sizeDefault);
+        saveSampleProducts(21);
         getMockMvc().perform(
                 MockMvcRequestBuilders.get(baseEndpoint)
                         .queryParam("page", pageDefault.toString()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(sizeDefault)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(20)));
     }
 
     @Test
     void getAllProducts_branch_nullParams() throws Exception {
-        saveSampleProducts(sizeDefault);
+        saveSampleProducts(21);
         getMockMvc().perform(
                 MockMvcRequestBuilders.get(baseEndpoint))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(sizeDefault)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(20)));
+    }
+
+    @Test
+    void getProduct() throws Exception {
+        Product expectedProduct = productRepository.saveAndFlush(generateRandomProduct());
+        saveSampleProducts(sizeDefault);
+        getMockMvc().perform(
+                MockMvcRequestBuilders.get(baseEndpoint + "/{id}", expectedProduct.getId()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(expectedProduct.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(expectedProduct.getName()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.number").value(expectedProduct.getNumber()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(expectedProduct.getPrice().intValue()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.colour").value(expectedProduct.getColour().getValue()));
+    }
+
+    @Test
+    void getProduct_error_notFound() throws Exception {
+        saveSampleProducts(sizeDefault + 1);
+        getMockMvc().perform(MockMvcRequestBuilders.get(baseEndpoint + "/{id}", 0))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Produto não encontrado!"));
     }
 
 }

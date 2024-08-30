@@ -9,9 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.julio.mariano.hackathon_santo_digital.domain.model.Product;
 import br.julio.mariano.hackathon_santo_digital.infrastructure.repository.ProductRepository;
 import br.julio.mariano.hackathon_santo_digital.infrastructure.repository.specification.ProductSpecification;
 import br.julio.mariano.hackathon_santo_digital.util.mapper.ProductMapper;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -30,6 +32,12 @@ public class ProductService {
     public List<ProductGetDTO> getAll(@Valid ProductFilter filter, Pageable pageable) {
         return productRepository.findAll(ProductSpecification.filter(filter), pageable)
                 .map(ProductMapper.INSTANCE::toGetDto).toList();
+    }
+
+    public ProductGetDTO getById(Integer id) {
+        Product fetchedProduct = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado!"));
+        return ProductMapper.INSTANCE.toGetDto(fetchedProduct);
     }
 
 }

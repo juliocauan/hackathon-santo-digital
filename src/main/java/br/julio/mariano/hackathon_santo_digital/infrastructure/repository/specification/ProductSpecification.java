@@ -18,9 +18,6 @@ public interface ProductSpecification {
             Predicate predicate = criteriaBuilder.conjunction();
             List<Order> orders = new ArrayList<>();
 
-            if (filter == null)
-                return predicate;
-
             if (filter.getNumber() != null) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.equal(root.get("number"), filter.getNumber()));
