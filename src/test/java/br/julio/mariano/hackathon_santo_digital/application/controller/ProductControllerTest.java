@@ -11,6 +11,7 @@ import org.openapitools.model.OrderEnum;
 import org.openapitools.model.ProductColour;
 import org.openapitools.model.ProductFilter;
 import org.openapitools.model.ProductPostDTO;
+import org.openapitools.model.ProductPutDTO;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -275,6 +276,65 @@ class ProductControllerTest extends TestContext {
     void getProduct_error_notFound() throws Exception {
         saveSampleProducts(sizeDefault + 1);
         getMockMvc().perform(MockMvcRequestBuilders.get(baseEndpoint + "/{id}", 0))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Produto não encontrado!"));
+    }
+
+    @Test
+    void updateProduct() throws Exception {
+        Product oldProduct = productRepository.saveAndFlush(generateRandomProduct());
+        ProductPutDTO putDTO = new ProductPutDTO()
+                .colour(ProductColour.VERDE)
+                .name(getRandomString())
+                .number((int) (Math.random() * 100))
+                .price(new BigDecimal(Math.round(Math.random() * 100)));
+
+        getMockMvc().perform(MockMvcRequestBuilders.put(baseEndpoint + "/{id}", oldProduct.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(writeValueAsString(putDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Produto atualizado com sucesso!"));
+    }
+
+    @Test
+    void updateProduct_branch_withNullParams() throws Exception {
+        Product oldProduct = productRepository.saveAndFlush(generateRandomProduct());
+        ProductPutDTO putDTO = new ProductPutDTO()
+                .colour(null)
+                .name(getRandomString())
+                .number(null)
+                .price(new BigDecimal(Math.round(Math.random() * 100)));
+                
+        getMockMvc().perform(MockMvcRequestBuilders.put(baseEndpoint + "/{id}", oldProduct.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(writeValueAsString(putDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Produto atualizado com sucesso!"));
+    }
+
+    @Test
+    void updateProduct_error_invalidInput() throws Exception {
+        Product oldProduct = productRepository.saveAndFlush(generateRandomProduct());
+        ProductPutDTO putDTO = new ProductPutDTO()
+                .colour(ProductColour.VERDE)
+                .name("!034")
+                .number((int) (Math.random() * 100))
+                .price(new BigDecimal(Math.round(Math.random() * 100)));
+
+        getMockMvc().perform(MockMvcRequestBuilders.put(baseEndpoint + "/{id}", oldProduct.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(writeValueAsString(putDTO)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Input validation error!"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fieldErrors", Matchers.hasSize(1)));
+    }
+
+    @Test
+    void updateProduct_error_notFound() throws Exception {
+        ProductPutDTO putDTO = new ProductPutDTO();
+        getMockMvc().perform(MockMvcRequestBuilders.put(baseEndpoint + "/{id}", 0)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(writeValueAsString(putDTO)))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Produto não encontrado!"));
     }

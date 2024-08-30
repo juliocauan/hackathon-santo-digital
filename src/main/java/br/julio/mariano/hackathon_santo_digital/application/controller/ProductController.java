@@ -43,8 +43,8 @@ public class ProductController implements ProductApi {
 
     @Override
     public ResponseEntity<OkResponse> _updateProduct(@Valid ProductPutDTO productPutDTO, Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method '_updateProduct'");
+        productService.update(productPutDTO, id);
+        return ResponseEntity.status(HttpStatus.OK).body(new OkResponse("Produto atualizado com sucesso!"));
     }
     
     @Override
