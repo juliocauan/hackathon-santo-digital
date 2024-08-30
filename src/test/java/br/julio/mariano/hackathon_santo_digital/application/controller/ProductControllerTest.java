@@ -48,7 +48,7 @@ class ProductControllerTest extends TestContext {
                 .id(null)
                 .colour(ProductColour.AZUL)
                 .name(getRandomString())
-                .number((int) (Math.random() * 100))
+                .number((int) (Math.random() * 1000))
                 .price(new BigDecimal(Math.round(Math.random() * 100)))
                 .build();
     }
@@ -335,6 +335,21 @@ class ProductControllerTest extends TestContext {
         getMockMvc().perform(MockMvcRequestBuilders.put(baseEndpoint + "/{id}", 0)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(writeValueAsString(putDTO)))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Produto não encontrado!"));
+    }
+
+    @Test
+    void deleteProduct() throws Exception {
+        Integer id = productRepository.saveAndFlush(generateRandomProduct()).getId();
+        getMockMvc().perform(MockMvcRequestBuilders.delete(baseEndpoint + "/{id}", id))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Produto removido com sucesso!"));
+    }
+
+    @Test
+    void deleteProduct_error_notFound() throws Exception {
+        getMockMvc().perform(MockMvcRequestBuilders.delete(baseEndpoint + "/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Produto não encontrado!"));
     }

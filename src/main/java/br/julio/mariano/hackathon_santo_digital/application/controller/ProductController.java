@@ -49,8 +49,8 @@ public class ProductController implements ProductApi {
     
     @Override
     public ResponseEntity<OkResponse> _deleteProduct(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method '_deleteProduct'");
+        productService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new OkResponse("Produto removido com sucesso!"));
     }
     
 }

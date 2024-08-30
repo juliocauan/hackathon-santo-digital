@@ -49,4 +49,10 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    public void delete(Integer id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado!"));
+        productRepository.deleteById(product.getId());
+    }
+
 }

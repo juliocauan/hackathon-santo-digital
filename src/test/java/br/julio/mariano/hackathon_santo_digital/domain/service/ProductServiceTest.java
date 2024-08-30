@@ -104,4 +104,21 @@ class ProductServiceTest extends TestContext {
         assertEquals("Produto não encontrado!", exception.getMessage());
     }
 
+    @Test
+    void delete() {
+        Integer id = productRepository.save(generateRandomProduct()).getId();
+        assertEquals(1, productRepository.findAll().size());
+        assertDoesNotThrow(() -> productService.delete(id));
+        assertEquals(0, productRepository.findAll().size());
+    }
+
+    @Test
+    void delete_error_notFound() {
+        Integer id = productRepository.save(generateRandomProduct()).getId();
+        assertEquals(1, productRepository.findAll().size());
+        EntityNotFoundException exception = assertThrowsExactly(EntityNotFoundException.class,
+                () -> productService.delete(id + 1));
+        assertEquals("Produto não encontrado!", exception.getMessage());
+    }
+
 }
