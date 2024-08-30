@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.julio.mariano.hackathon_santo_digital.infrastructure.repository.ProductRepository;
+import br.julio.mariano.hackathon_santo_digital.infrastructure.repository.specification.ProductSpecification;
 import br.julio.mariano.hackathon_santo_digital.util.mapper.ProductMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,16 +19,17 @@ import lombok.AllArgsConstructor;
 @Transactional
 @AllArgsConstructor
 public class ProductService {
-    
+
     private final ProductRepository productRepository;
 
     public void register(@Valid ProductPostDTO productPostDTO) {
         productRepository.save(ProductMapper.INSTANCE.toEntity(productPostDTO));
     }
 
+    @Transactional(readOnly = true)
     public List<ProductGetDTO> getAll(@Valid ProductFilter filter, Pageable pageable) {
-        
-        return null;
+        return productRepository.findAll(ProductSpecification.filter(filter), pageable)
+                .map(ProductMapper.INSTANCE::toGetDto).toList();
     }
 
 }

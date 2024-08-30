@@ -3,9 +3,8 @@ package br.julio.mariano.hackathon_santo_digital.infrastructure.repository.speci
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openapitools.model.OrderEnum;
 import org.openapitools.model.ProductFilter;
-import org.openapitools.model.ProductFilter.NameEnum;
-import org.openapitools.model.ProductFilter.PriceEnum;
 import org.springframework.data.jpa.domain.Specification;
 
 import br.julio.mariano.hackathon_santo_digital.domain.model.Product;
@@ -33,12 +32,12 @@ public interface ProductSpecification {
             }
 
             if (filter.getName() != null) {
-                orders.add(filter.getName() == NameEnum.ASC ? criteriaBuilder.asc(root.get("name"))
+                orders.add(filter.getName() == OrderEnum.ASC ? criteriaBuilder.asc(root.get("name"))
                         : criteriaBuilder.desc(root.get("name")));
             }
 
             if (filter.getPrice() != null) {
-                orders.add(filter.getPrice() == PriceEnum.ASC ? criteriaBuilder.asc(root.get("price"))
+                orders.add(filter.getPrice() == OrderEnum.ASC ? criteriaBuilder.asc(root.get("price"))
                         : criteriaBuilder.desc(root.get("price")));
             }
 

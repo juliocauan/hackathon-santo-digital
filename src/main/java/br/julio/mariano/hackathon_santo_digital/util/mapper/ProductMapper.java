@@ -3,6 +3,7 @@ package br.julio.mariano.hackathon_santo_digital.util.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.openapitools.model.ProductGetDTO;
 import org.openapitools.model.ProductPostDTO;
 
 import br.julio.mariano.hackathon_santo_digital.domain.model.Product;
@@ -13,4 +14,6 @@ public interface ProductMapper {
 
     @Mapping(target = "id", ignore = true)
     Product toEntity(ProductPostDTO postDTO);
+    
+    ProductGetDTO toGetDto(Product product);
 }

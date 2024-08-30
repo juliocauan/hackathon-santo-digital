@@ -14,12 +14,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity @Table(name = "product")
-@Data @EqualsAndHashCode
+@Data @EqualsAndHashCode @Builder
 @NoArgsConstructor @AllArgsConstructor
 public class Product {
     

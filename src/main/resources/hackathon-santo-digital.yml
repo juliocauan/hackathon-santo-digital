@@ -58,7 +58,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductGetDTO'
 
-  /product/{id}:
+  /products/{id}:
     get:
       tags:
         - 'product'
@@ -227,16 +227,18 @@ components:
       type: object
       properties:
         name:
-          type: string
-          enum: ['asc', 'desc']
+          $ref: '#/components/schemas/OrderEnum'
         number:
           type: integer
           format: int32
         price:
-          type: string
-          enum: ['asc', 'desc']
+          $ref: '#/components/schemas/OrderEnum'
         colour:
           $ref: '#/components/schemas/ProductColour'
+
+    OrderEnum:
+      type: string
+      enum: ['ASC', 'DESC']
 
   responses:
     OK:
