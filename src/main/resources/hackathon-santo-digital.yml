@@ -76,7 +76,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductGetDTO'
+                $ref: '#/components/schemas/ProductDetailsDTO'
         '404':
           $ref: '#/components/responses/NotFound'
     put:
@@ -173,27 +173,45 @@ components:
     ProductId:
       type: integer
       format: int32
-    ProductColour:
-      type: string
-      enum: ['VERMELHO', 'VERDE', 'AZUL']
     ProductPostDTO:
       type: object
       required:
         - name
-        - number
-        - price
+        - productNumber
+        - safetyStockLevel
+        - reorderPoint
+        - standardCost
+        - listPrice
+        - daysToManufacture
+        - sellStartDate
       properties:
         name:
           type: string
           minLength: 5
           maxLength: 255
-        number:
+        productNumber:
+          type: string
+          minLength: 5
+          maxLength: 25
+        color:
+          type: string
+          maxLength: 15
+        safetyStockLevel:
           type: integer
           format: int32
-        price:
+        reorderPoint:
+          type: integer
+          format: int32
+        standardCost:
           type: number
-        colour:
-          $ref: '#/components/schemas/ProductColour'
+        listPrice:
+          type: number
+        daysToManufacture:
+          type: integer
+          format: int32
+        sellStartDate:
+          type: string
+          format: date
     ProductGetDTO:
       type: object
       properties:
@@ -202,39 +220,74 @@ components:
           readOnly: true
         name:
           type: string
-        number:
+        productNumber:
+          type: string
+        standardCost:
+          type: number
+        color:
+          type: string
+    ProductDetailsDTO:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/ProductId'
+          readOnly: true
+        name:
+          type: string
+        productNumber:
+          type: string
+        color:
+          type: string
+        safetyStockLevel:
           type: integer
           format: int32
-        price:
+        reorderPoint:
+          type: integer
+          format: int32
+        standardCost:
           type: number
-        colour:
-          $ref: '#/components/schemas/ProductColour'
+        listPrice:
+          type: number
+        daysToManufacture:
+          type: integer
+          format: int32
+        sellStartDate:
+          type: string
+          format: date
     ProductPutDTO:
       type: object
       properties:
-        name:
+        color:
           type: string
-          minLength: 5
-          maxLength: 255
-        number:
+          maxLength: 15
+        safetyStockLevel:
           type: integer
           format: int32
-        price:
+        reorderPoint:
+          type: integer
+          format: int32
+        standardCost:
           type: number
-        colour:
-          $ref: '#/components/schemas/ProductColour'
+        listPrice:
+          type: number
+        daysToManufacture:
+          type: integer
+          format: int32
+        sellStartDate:
+          type: string
+          format: date
     ProductFilter:
       type: object
       properties:
         name:
           $ref: '#/components/schemas/OrderEnum'
-        number:
-          type: integer
-          format: int32
-        price:
+        productNumber:
+          type: string
+        standardCost:
           $ref: '#/components/schemas/OrderEnum'
-        colour:
-          $ref: '#/components/schemas/ProductColour'
+        color:
+          type: string
+          maxLength: 15
 
     OrderEnum:
       type: string

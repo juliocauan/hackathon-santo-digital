@@ -1,13 +1,10 @@
 package br.julio.mariano.hackathon_santo_digital.domain.model;
 
 import java.math.BigDecimal;
-
-import org.openapitools.model.ProductColour;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,26 +16,41 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity @Table(name = "product")
+@Entity @Table(schema = "production", name = "product")
 @Data @EqualsAndHashCode @Builder
 @NoArgsConstructor @AllArgsConstructor
 public class Product {
     
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "productid", nullable = false)
     private Integer id;
 
     @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "number", nullable = false)
-    private Integer number;
+    @Column(name = "productnumber", nullable = false)
+    private String productNumber;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
+    @Column(name = "color", nullable = true)
+    private String color;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "colour", nullable = true)
-    private ProductColour colour;
+    @Column(name = "safetystocklevel", nullable = false)
+    private Short safetyStockLevel;
+
+    @Column(name = "reorderpoint", nullable = false)
+    private Short reorderPoint;
+
+    @Column(name = "standardcost", nullable = false)
+    private BigDecimal standardCost;
+
+    @Column(name = "listprice", nullable = false)
+    private BigDecimal listPrice;
+
+    @Column(name = "daystomanufacture", nullable = false)
+    private Integer daysToManufacture;
+
+    @Column(name = "sellstartdate", nullable = false)
+    private LocalDate sellStartDate;
     
 }

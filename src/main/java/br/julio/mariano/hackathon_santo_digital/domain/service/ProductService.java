@@ -2,6 +2,7 @@ package br.julio.mariano.hackathon_santo_digital.domain.service;
 
 import java.util.List;
 
+import org.openapitools.model.ProductDetailsDTO;
 import org.openapitools.model.ProductFilter;
 import org.openapitools.model.ProductGetDTO;
 import org.openapitools.model.ProductPostDTO;
@@ -36,10 +37,10 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductGetDTO getById(Integer id) {
+    public ProductDetailsDTO getById(Integer id) {
         Product fetchedProduct = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado!"));
-        return ProductMapper.INSTANCE.toGetDto(fetchedProduct);
+        return ProductMapper.INSTANCE.toDetailsDto(fetchedProduct);
     }
 
     public void update(@Valid ProductPutDTO productPutDTO, Integer id) {

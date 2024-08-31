@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import org.openapitools.model.ProductDetailsDTO;
 import org.openapitools.model.ProductGetDTO;
 import org.openapitools.model.ProductPostDTO;
 import org.openapitools.model.ProductPutDTO;
@@ -19,9 +20,12 @@ public interface ProductMapper {
     
     ProductGetDTO toGetDto(Product product);
 
+    //TODO check this
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "name", conditionExpression = "java(putDTO.getName() != null)", defaultExpression = "java(product.getName())")
-    @Mapping(target = "price", conditionExpression = "java(putDTO.getPrice() != null)", defaultExpression = "java(product.getPrice())")
-    @Mapping(target = "number", conditionExpression = "java(putDTO.getNumber() != null)", defaultExpression = "java(product.getNumber())")
+    @Mapping(target = "name", ignore = true)
+    @Mapping(target = "productNumber", ignore = true)
+    @Mapping(target = "standardCost", conditionExpression = "java(putDTO.getStandardCost() != null)", defaultExpression = "java(product.getStandardCost())")
     void update(ProductPutDTO putDTO, @MappingTarget Product product);
+
+    ProductDetailsDTO toDetailsDto(Product fetchedProduct);
 }

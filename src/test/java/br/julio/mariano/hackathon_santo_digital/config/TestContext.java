@@ -1,5 +1,6 @@
 package br.julio.mariano.hackathon_santo_digital.config;
 
+import java.math.BigDecimal;
 import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.TestInstance;
@@ -46,6 +47,14 @@ public class TestContext {
             sb.append(characters.charAt(index));
         }
         return sb.toString();
+    }
+
+    public BigDecimal getRandomBigDecimal() {
+        return new BigDecimal(Math.random() * 100);
+    }
+
+    public Integer getRandomInteger() {
+        return (int) (Math.random() * 10);
     }
 
 }

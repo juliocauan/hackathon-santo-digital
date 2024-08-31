@@ -18,14 +18,14 @@ public interface ProductSpecification {
             Predicate predicate = criteriaBuilder.conjunction();
             List<Order> orders = new ArrayList<>();
 
-            if (filter.getNumber() != null) {
+            if (filter.getProductNumber() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.equal(root.get("number"), filter.getNumber()));
+                        criteriaBuilder.equal(root.get("productNumber"), filter.getProductNumber()));
             }
 
-            if (filter.getColour() != null) {
+            if (filter.getColor() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.like(root.get("colour"), filter.getColour().getValue()));
+                        criteriaBuilder.like(root.get("color"), filter.getColor()));
             }
 
             if (filter.getName() != null) {
@@ -33,9 +33,9 @@ public interface ProductSpecification {
                         : criteriaBuilder.desc(root.get("name")));
             }
 
-            if (filter.getPrice() != null) {
-                orders.add(filter.getPrice() == OrderEnum.ASC ? criteriaBuilder.asc(root.get("price"))
-                        : criteriaBuilder.desc(root.get("price")));
+            if (filter.getStandardCost() != null) {
+                orders.add(filter.getStandardCost() == OrderEnum.ASC ? criteriaBuilder.asc(root.get("standardCost"))
+                        : criteriaBuilder.desc(root.get("standardCost")));
             }
 
             criteriaQuery.orderBy(orders);

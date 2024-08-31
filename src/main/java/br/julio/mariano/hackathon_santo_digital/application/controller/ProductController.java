@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openapitools.api.ProductApi;
 import org.openapitools.model.OkResponse;
+import org.openapitools.model.ProductDetailsDTO;
 import org.openapitools.model.ProductFilter;
 import org.openapitools.model.ProductGetDTO;
 import org.openapitools.model.ProductPostDTO;
@@ -36,8 +37,8 @@ public class ProductController implements ProductApi {
     }
 
     @Override
-    public ResponseEntity<ProductGetDTO> _getProduct(Integer id) {
-        ProductGetDTO response = productService.getById(id);
+    public ResponseEntity<ProductDetailsDTO> _getProduct(Integer id) {
+        ProductDetailsDTO response = productService.getById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
