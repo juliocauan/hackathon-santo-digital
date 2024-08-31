@@ -7,12 +7,14 @@ services:
     environment:
       - POSTGRES_USER=sa
       - POSTGRES_PASSWORD=sa
-      - POSTGRES_DB=hackathon-santo-digital-test
+      - POSTGRES_DB=AdventureWorks-test
     ports:
       - 5434:5432
     volumes:
+      - ./src/main/resources/data/:/data
+      - ./install.sql:/docker-entrypoint-initdb.d/install.sql
       - data:/var/lib/postgresql/data
 
 volumes:
   data:
-    name: hackathon-santo-digital-test
+    name: AdventureWorks-test
