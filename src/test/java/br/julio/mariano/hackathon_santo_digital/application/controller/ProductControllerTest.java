@@ -69,9 +69,16 @@ class ProductControllerTest extends TestContext {
 
         @Test
         void registerProduct() throws Exception {
-                ProductPostDTO postDTO = new ProductPostDTO(getRandomString(), getRandomString(10), getRandomInteger(),
-                                getRandomInteger(), getRandomBigDecimal(), getRandomBigDecimal(), getRandomInteger(),
-                                LocalDate.now()).color(getRandomString(10));
+                ProductPostDTO postDTO = new ProductPostDTO()
+                                .color(getRandomString(10))
+                                .daysToManufacture(getRandomInteger())
+                                .listPrice(getRandomBigDecimal())
+                                .name(getRandomString())
+                                .productNumber(getRandomString(10))
+                                .reorderPoint(getRandomInteger())
+                                .safetyStockLevel(getRandomInteger())
+                                .sellStartDate(LocalDate.now())
+                                .standardCost(getRandomBigDecimal());
                 getMockMvc().perform(MockMvcRequestBuilders.post(baseEndpoint)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(writeValueAsString(postDTO)))
@@ -101,7 +108,6 @@ class ProductControllerTest extends TestContext {
                                 .andExpect(MockMvcResultMatchers.status().isOk())
                                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(sizeDefault)));
         }
-
 
         @Test
         void getAllProducts_branch_orderByNameAsc() throws Exception {
@@ -348,7 +354,7 @@ class ProductControllerTest extends TestContext {
 
         @Test
         void deleteProduct_error_notFound() throws Exception {
-                getMockMvc().perform(MockMvcRequestBuilders.delete(baseEndpoint + "/{id}", 1))
+                getMockMvc().perform(MockMvcRequestBuilders.delete(baseEndpoint + "/{id}", 0))
                                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                                 .andExpect(MockMvcResultMatchers.jsonPath("$.message")
                                                 .value("Produto não encontrado!"));

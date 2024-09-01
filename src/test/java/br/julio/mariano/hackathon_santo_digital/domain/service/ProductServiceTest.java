@@ -60,20 +60,25 @@ class ProductServiceTest extends TestContext {
 
     @Test
     void register() {
-        ProductPostDTO expectedProduct = new ProductPostDTO(getRandomString(), getRandomString(15), getRandomInteger(),
-                getRandomInteger(), getRandomBigDecimal(), getRandomBigDecimal(), getRandomInteger(), LocalDate.now())
-                .color(getRandomString(10));
-        Product fetchedProduct;
-        assertDoesNotThrow(() -> productService.register(expectedProduct));
-        fetchedProduct = productRepository.findAll().get(0);
+        ProductPostDTO expectedProduct = new ProductPostDTO()
+                .color(getRandomString(10))
+                .daysToManufacture(getRandomInteger())
+                .listPrice(getRandomBigDecimal())
+                .name(getRandomString())
+                .productNumber(getRandomString(10))
+                .reorderPoint(getRandomInteger())
+                .safetyStockLevel(getRandomInteger())
+                .sellStartDate(LocalDate.now())
+                .standardCost(getRandomBigDecimal());
+        Product fetchedProduct = productService.register(expectedProduct);
         assertEquals(expectedProduct.getColor(), fetchedProduct.getColor());
         assertEquals(expectedProduct.getName(), fetchedProduct.getName());
         assertEquals(expectedProduct.getProductNumber(), fetchedProduct.getProductNumber());
         assertEquals(expectedProduct.getStandardCost(), fetchedProduct.getStandardCost());
         assertEquals(expectedProduct.getDaysToManufacture(), fetchedProduct.getDaysToManufacture());
         assertEquals(expectedProduct.getListPrice(), fetchedProduct.getListPrice());
-        assertEquals(expectedProduct.getReorderPoint(), fetchedProduct.getReorderPoint());
-        assertEquals(expectedProduct.getSafetyStockLevel(), fetchedProduct.getSafetyStockLevel());
+        assertEquals(expectedProduct.getReorderPoint(), fetchedProduct.getReorderPoint().intValue());
+        assertEquals(expectedProduct.getSafetyStockLevel(), fetchedProduct.getSafetyStockLevel().intValue());
         assertEquals(expectedProduct.getSellStartDate(), fetchedProduct.getSellStartDate());
     }
 
@@ -87,7 +92,7 @@ class ProductServiceTest extends TestContext {
                 .reorderPoint(getRandomInteger())
                 .standardCost(getRandomBigDecimal());
         assertDoesNotThrow(() -> productService.update(putDTO, oldProduct.getId()));
-        newProduct = productRepository.findAll().get(0);
+        newProduct = productRepository.findById(oldProduct.getId()).get();
         assertEquals(oldProduct.getId(), newProduct.getId());
         assertEquals(putDTO.getColor(), newProduct.getColor());
         assertEquals(oldProduct.getName(), newProduct.getName());
@@ -95,7 +100,7 @@ class ProductServiceTest extends TestContext {
         assertEquals(putDTO.getStandardCost(), newProduct.getStandardCost());
         assertEquals(putDTO.getDaysToManufacture(), newProduct.getDaysToManufacture());
         assertEquals(oldProduct.getListPrice(), newProduct.getListPrice());
-        assertEquals(putDTO.getReorderPoint(), newProduct.getReorderPoint());
+        assertEquals(putDTO.getReorderPoint(), newProduct.getReorderPoint().intValue());
         assertEquals(oldProduct.getSafetyStockLevel(), newProduct.getSafetyStockLevel());
         assertEquals(oldProduct.getSellStartDate(), newProduct.getSellStartDate());
         productRepository.delete(oldProduct);
@@ -111,7 +116,7 @@ class ProductServiceTest extends TestContext {
                 .reorderPoint(null)
                 .standardCost(getRandomBigDecimal());
         assertDoesNotThrow(() -> productService.update(putDTO, oldProduct.getId()));
-        newProduct = productRepository.findAll().get(0);
+        newProduct = productRepository.findById(oldProduct.getId()).get();
         assertEquals(oldProduct.getId(), newProduct.getId());
         assertEquals(putDTO.getColor(), newProduct.getColor());
         assertEquals(oldProduct.getName(), newProduct.getName());

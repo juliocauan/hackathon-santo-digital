@@ -54,7 +54,7 @@ public class TestContext {
     }
 
     public Integer getRandomInteger() {
-        return (int) (Math.random() * 10);
+        return getRandomBigDecimal().intValue();
     }
 
 }

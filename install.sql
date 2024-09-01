@@ -640,6 +640,7 @@ SELECT 'Copying data into Production.ProductModel';
 \copy Production.ProductModel FROM './data/ProductModel.csv' DELIMITER E'\t' CSV;
 SELECT 'Copying data into Production.Product';
 \copy Production.Product FROM './data/Product.csv' DELIMITER E'\t' CSV;
+ALTER SEQUENCE Production.product_productid_seq RESTART WITH 2000;
 SELECT 'Copying data into Production.ProductCostHistory';
 \copy Production.ProductCostHistory FROM './data/ProductCostHistory.csv' DELIMITER E'\t' CSV;
 SELECT 'Copying data into Production.ProductDescription';

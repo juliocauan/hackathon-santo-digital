@@ -20,11 +20,15 @@ public interface ProductMapper {
     
     ProductGetDTO toGetDto(Product product);
 
-    //TODO check this
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", ignore = true)
     @Mapping(target = "productNumber", ignore = true)
+    @Mapping(target = "safetyStockLevel", conditionExpression = "java(putDTO.getSafetyStockLevel() != null)", defaultExpression = "java(product.getSafetyStockLevel())")
+    @Mapping(target = "reorderPoint", conditionExpression = "java(putDTO.getReorderPoint() != null)", defaultExpression = "java(product.getReorderPoint())")
     @Mapping(target = "standardCost", conditionExpression = "java(putDTO.getStandardCost() != null)", defaultExpression = "java(product.getStandardCost())")
+    @Mapping(target = "listPrice", conditionExpression = "java(putDTO.getListPrice() != null)", defaultExpression = "java(product.getListPrice())")
+    @Mapping(target = "daysToManufacture", conditionExpression = "java(putDTO.getDaysToManufacture() != null)", defaultExpression = "java(product.getDaysToManufacture())")
+    @Mapping(target = "sellStartDate", conditionExpression = "java(putDTO.getSellStartDate() != null)", defaultExpression = "java(product.getSellStartDate())")
     void update(ProductPutDTO putDTO, @MappingTarget Product product);
 
     ProductDetailsDTO toDetailsDto(Product fetchedProduct);

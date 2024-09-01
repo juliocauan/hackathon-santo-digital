@@ -26,8 +26,8 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public void register(@Valid ProductPostDTO productPostDTO) {
-        productRepository.save(ProductMapper.INSTANCE.toEntity(productPostDTO));
+    public Product register(@Valid ProductPostDTO productPostDTO) {
+        return productRepository.save(ProductMapper.INSTANCE.toEntity(productPostDTO));
     }
 
     @Transactional(readOnly = true)
