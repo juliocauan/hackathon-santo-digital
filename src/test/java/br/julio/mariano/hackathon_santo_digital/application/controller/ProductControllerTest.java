@@ -13,6 +13,7 @@ import org.openapitools.model.ProductFilter;
 import org.openapitools.model.ProductPostDTO;
 import org.openapitools.model.ProductPutDTO;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -68,6 +69,7 @@ class ProductControllerTest extends TestContext {
         }
 
         @Test
+        @WithUserDetails(value = "admin")
         void registerProduct() throws Exception {
                 ProductPostDTO postDTO = new ProductPostDTO()
                                 .color(getRandomString(10))
@@ -88,6 +90,7 @@ class ProductControllerTest extends TestContext {
         }
 
         @Test
+        @WithUserDetails(value = "admin")
         void registerProduct_error_invalidInput() throws Exception {
                 ProductPostDTO postDTO = new ProductPostDTO().color(getRandomString(10));
                 getMockMvc().perform(MockMvcRequestBuilders.post(baseEndpoint)
@@ -250,7 +253,6 @@ class ProductControllerTest extends TestContext {
                                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(20)));
         }
 
-        // TODO test more
         @Test
         void getProduct() throws Exception {
                 Product expectedProduct = productRepository.saveAndFlush(generateRandomProduct());
@@ -279,6 +281,7 @@ class ProductControllerTest extends TestContext {
         }
 
         @Test
+        @WithUserDetails(value = "admin")
         void updateProduct() throws Exception {
                 Product oldProduct = productRepository.saveAndFlush(generateRandomProduct());
                 ProductPutDTO putDTO = new ProductPutDTO()
@@ -297,6 +300,7 @@ class ProductControllerTest extends TestContext {
         }
 
         @Test
+        @WithUserDetails(value = "admin")
         void updateProduct_branch_withNullParams() throws Exception {
                 Product oldProduct = productRepository.saveAndFlush(generateRandomProduct());
                 ProductPutDTO putDTO = new ProductPutDTO()
@@ -315,6 +319,7 @@ class ProductControllerTest extends TestContext {
         }
 
         @Test
+        @WithUserDetails(value = "admin")
         void updateProduct_error_invalidInput() throws Exception {
                 Product oldProduct = productRepository.saveAndFlush(generateRandomProduct());
                 ProductPutDTO putDTO = new ProductPutDTO()
@@ -333,6 +338,7 @@ class ProductControllerTest extends TestContext {
         }
 
         @Test
+        @WithUserDetails(value = "admin")
         void updateProduct_error_notFound() throws Exception {
                 ProductPutDTO putDTO = new ProductPutDTO();
                 getMockMvc().perform(MockMvcRequestBuilders.put(baseEndpoint + "/{id}", 0)
@@ -344,6 +350,7 @@ class ProductControllerTest extends TestContext {
         }
 
         @Test
+        @WithUserDetails(value = "admin")
         void deleteProduct() throws Exception {
                 Integer id = productRepository.saveAndFlush(generateRandomProduct()).getId();
                 getMockMvc().perform(MockMvcRequestBuilders.delete(baseEndpoint + "/{id}", id))
@@ -353,6 +360,7 @@ class ProductControllerTest extends TestContext {
         }
 
         @Test
+        @WithUserDetails(value = "admin")
         void deleteProduct_error_notFound() throws Exception {
                 getMockMvc().perform(MockMvcRequestBuilders.delete(baseEndpoint + "/{id}", 0))
                                 .andExpect(MockMvcResultMatchers.status().isNotFound())

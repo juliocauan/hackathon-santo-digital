@@ -12,6 +12,7 @@ import org.openapitools.model.ProductPutDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.julio.mariano.hackathon_santo_digital.domain.service.ProductService;
@@ -25,6 +26,7 @@ public class ProductController implements ProductApi {
     private final ProductService productService;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<OkResponse> _registerProduct(@Valid ProductPostDTO productPostDTO) {
         productService.register(productPostDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new OkResponse("Produto registrado com sucesso!"));
@@ -43,12 +45,14 @@ public class ProductController implements ProductApi {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<OkResponse> _updateProduct(@Valid ProductPutDTO productPutDTO, Integer id) {
         productService.update(productPutDTO, id);
         return ResponseEntity.status(HttpStatus.OK).body(new OkResponse("Produto atualizado com sucesso!"));
     }
     
     @Override
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<OkResponse> _deleteProduct(Integer id) {
         productService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body(new OkResponse("Produto removido com sucesso!"));

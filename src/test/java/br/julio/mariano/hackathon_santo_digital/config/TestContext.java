@@ -50,11 +50,11 @@ public class TestContext {
     }
 
     public BigDecimal getRandomBigDecimal() {
-        return new BigDecimal(Math.random() * 100);
+        return new BigDecimal(randomGenerator.nextDouble(1, 2000));
     }
 
     public Integer getRandomInteger() {
-        return getRandomBigDecimal().intValue();
+        return randomGenerator.nextInt(1, 2000);
     }
 
 }
