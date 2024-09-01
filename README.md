@@ -29,6 +29,10 @@ O PostgreSQL foi escolhido por sua curva de aprendizado relativamente suave e po
     docker compose -f docker-compose.yaml up -d --build
     ```
 
+3. **Como usar:**
+
+    A documentação Swagger(OpenAPI) se encontra no diretório **src/main/resources/hackathon-santo-digital.yml**
+
 **Executar testes e gerar relatório:**
 
 1. **Iniciar os containers de teste:**
