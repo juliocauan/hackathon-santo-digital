@@ -15,9 +15,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity @Table(schema = "production", name = "product")
-@Data @EqualsAndHashCode @Builder
+@Data @EqualsAndHashCode @Builder @ToString
 @NoArgsConstructor @AllArgsConstructor
 public class Product {
     
