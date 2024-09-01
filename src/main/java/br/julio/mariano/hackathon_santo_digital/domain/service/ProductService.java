@@ -31,7 +31,7 @@ public class ProductService {
 
     public Product register(@Valid ProductPostDTO productPostDTO) {
         Product newProduct = productRepository.save(ProductMapper.INSTANCE.toEntity(productPostDTO));
-        log.info("Register Product: " + LocalDateTime.now() + newProduct.toString());
+        log.info(String.format("Method: Register Product\nAt: %s\nValue: %s", LocalDateTime.now(), newProduct.toString()));
         return newProduct;
     }
 
@@ -39,7 +39,7 @@ public class ProductService {
     public List<ProductGetDTO> getAll(@Valid ProductFilter filter, Pageable pageable) {
         List<ProductGetDTO> fetchedProducts = productRepository.findAll(ProductSpecification.filter(filter), pageable)
                 .map(ProductMapper.INSTANCE::toGetDto).toList();
-        log.info("Get All Product: " + LocalDateTime.now() + fetchedProducts.toString());
+                log.info(String.format("Method: Get All Products\nAt: %s\nValues: %s", LocalDateTime.now(), fetchedProducts.toString()));
         return fetchedProducts;
     }
 
@@ -48,7 +48,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado!"));
         ProductDetailsDTO fetchedProduct = ProductMapper.INSTANCE.toDetailsDto(product);
-        log.info("Get Product: " + LocalDateTime.now() + fetchedProduct.toString());
+        log.info(String.format("Method: Get Product\nAt: %s\nValue: %s", LocalDateTime.now(), fetchedProduct.toString()));
         return fetchedProduct;
     }
 
@@ -57,13 +57,13 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado!"));
         ProductMapper.INSTANCE.update(productPutDTO, product);
         productRepository.save(product);
-        log.info("Update Product: " + LocalDateTime.now() + product.toString());
+        log.info(String.format("Method: Update Product\nAt: %s\nValue: %s", LocalDateTime.now(), product.toString()));
     }
 
     public void delete(Integer id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado!"));
-        log.info("Delete Product: " + LocalDateTime.now() + product.toString());
+        log.info(String.format("Method: Delete Product\nAt: %s\nValue: %s", LocalDateTime.now(), product.toString()));
         productRepository.deleteById(product.getId());
     }
 

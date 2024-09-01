@@ -199,13 +199,17 @@ components:
         safetyStockLevel:
           type: integer
           format: int32
+          minimum: 1
         reorderPoint:
           type: integer
           format: int32
+          minimum: 1
         standardCost:
           type: number
+          minimum: 0
         listPrice:
           type: number
+          minimum: 0
         daysToManufacture:
           type: integer
           format: int32
@@ -263,13 +267,17 @@ components:
         safetyStockLevel:
           type: integer
           format: int32
+          minimum: 1
         reorderPoint:
           type: integer
           format: int32
+          minimum: 1
         standardCost:
           type: number
+          minimum: 0
         listPrice:
           type: number
+          minimum: 0
         daysToManufacture:
           type: integer
           format: int32
