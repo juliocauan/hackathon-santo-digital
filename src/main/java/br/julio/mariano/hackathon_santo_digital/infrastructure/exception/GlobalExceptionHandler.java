@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.openapitools.model.ApiError;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -69,6 +70,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleBadCredentials(BadCredentialsException ex){
         ApiError responseError = standardError(ex);
         log.error("Entity Not Found Exception ::: {}", responseError);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseError);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex){
+        ApiError responseError = standardError(ex);
+        log.error("Data Integrity Violation Exception ::: {}", responseError);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseError);
     }
 

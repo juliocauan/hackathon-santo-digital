@@ -39,6 +39,7 @@ public class WebSecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
 
     private static final String URI_LOGIN = "/login";
+    private static final String URI_SIGNUP = "/signup";
     private static final String URI_PRODUCT = "/products";
 
     @Bean
@@ -79,7 +80,7 @@ public class WebSecurityConfig {
         http.authenticationProvider(authenticationProvider());
         http.cors(withDefaults()).csrf(csrf -> csrf.disable());
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.POST, URI_LOGIN).permitAll()
+                .requestMatchers(HttpMethod.POST, URI_LOGIN, URI_SIGNUP).permitAll()
                 .requestMatchers(HttpMethod.GET,
                         URI_PRODUCT,
                         URI_PRODUCT + "/{id}")

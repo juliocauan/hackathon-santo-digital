@@ -8,7 +8,6 @@ public interface UserSpecification {
 
     static Specification<User> usernameEquals(String usernameEquals){
         return (root, criteriaQuery, criteriaBuilder) -> {
-            if(usernameEquals == null) return null;
             return criteriaBuilder.like(root.get("username"), usernameEquals);
         };
     }
